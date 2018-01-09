@@ -1,0 +1,66 @@
+import classifiers
+import sys
+import data
+'''Reads in a training set and a test set and builds a KNN or Naive-Bayes
+    classifiers depending on user input in the command line. Classifies the test data and prints out the
+    results.
+    '''
+def readclassify(argv):
+    # usage
+    if len(argv) < 3:
+        print 'Usage: python %s <training data file> <test data file> <classtype> <optional training category file> <optional test category file>' % (argv[0])
+        exit(-1)
+
+    # read the training and test sets
+    dtrain = data.Data(argv[1])
+    dtest = data.Data(argv[2])
+
+    # get the categories and the training data A and the test data B
+    if len(argv) > 5:
+        traincatdata = data.Data(argv[4])
+        testcatdata = data.Data(argv[5])
+        traincats = traincatdata.get_data( [traincatdata.get_headers()[0]] )
+        testcats = testcatdata.get_data( [testcatdata.get_headers()[0]] )
+        A = dtrain.get_data( dtrain.get_headers() )
+        B = dtest.get_data( dtest.get_headers() )
+    else:
+        # assume the categories are the last column
+        traincats = dtrain.get_data( [dtrain.get_headers()[-1]] )
+        testcats = dtest.get_data( [dtest.get_headers()[-1]] )
+        A = dtrain.get_data( dtrain.get_headers()[:-1] )
+        B = dtest.get_data( dtest.get_headers()[:-1] )
+
+    if(argv[3]=="KNN"):
+        #create knn classifier
+        knnc=classifiers.KNN()
+        #build knn classifier
+        knnc.build(A,trainscats)
+        #use KNN classifier on test data
+        knncats, knnlabels = knnc.classify(B)
+
+        c = classifiers.Classifier(KNN)
+        cmtx = c.confusion_matrix(knncats,knnlabels)
+        cmtxstr = c.confusion_matrix_str(cmtx)
+        print cmtxstr
+
+    elif([3]=="Naive-Bayes"):
+        # create Naive-Bayes classifier
+        nbc = classifiers.NaiveBayes()
+        # build Naive-Bayes classifier
+        nbc.build(A, trainscats)
+        # use Naive-Bayes classifier on test data
+        nbccats, nbclabels = nbc.classify(B)
+
+        c = classifiers.Classifier(Naive-Bayes)
+        cmtx = c.confusion_matrix(nbccats,nbclabels)
+        cmtxstr = c.confusion_matrix_str(cmtx)
+        print cmtxstr
+
+
+
+
+def main(argv):
+    readclassify(argv)
+
+if __name__ == "__main__":
+    main(sys.argv)
